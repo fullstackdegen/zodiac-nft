@@ -18,14 +18,17 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-3">
+            <Link href="/" className="flex items-center">
               <Image
-                src="/logo.png"
+                src="/favicon.png"
                 alt="Zodiac NFT"
                 width={60}
                 height={60}
-                className="h-24 w-24 object-cover"
+                className="h-12 w-12 object-cover"
               />
+              <span className="text-lg font-bold text-foreground">
+                ZodiacNFT
+              </span>
             </Link>
           </div>
           <nav className="hidden md:flex space-x-8">

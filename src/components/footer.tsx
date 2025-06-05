@@ -1,17 +1,21 @@
+import Image from "next/image";
+
 export default function Footer() {
   return (
     <footer className="bg-muted border-t mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
           <div className="text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start space-x-3 mb-2">
-              <div className="w-6 h-6 bg-primary rounded flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-xs">
-                  ✦
-                </span>
-              </div>
+            <div className="flex items-center justify-center md:justify-start  mb-2">
+                <Image 
+                  src="/favicon.png" 
+                  alt="Zodiac NFT" 
+                  className="w-12 h-12"
+                  width={40}
+                  height={40}
+                />
               <span className="text-lg font-bold text-foreground">
-                Zodiac NFT
+                ZodiacNFT
               </span>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -21,12 +25,6 @@ export default function Footer() {
 
           <div className="flex flex-col items-center space-y-4">
             <div className="flex space-x-6">
-              <a
-                href="#"
-                className="text-muted-foreground hover:text-foreground transition-colors font-medium"
-              >
-                OpenSea
-              </a>
               <a
                 href="#"
                 className="text-muted-foreground hover:text-foreground transition-colors font-medium"
