@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     description:
       "Generate unique zodiac-based NFT avatars from your birth date using AI",
     type: "website",
-    images: ["/og-image.png"],
+    images: ["/og-image.webp"],
   },
   twitter: {
     card: "summary_large_image",
