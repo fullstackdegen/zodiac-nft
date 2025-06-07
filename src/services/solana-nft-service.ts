@@ -110,11 +110,20 @@ export class SolanaNFTService {
   constructor(network: "devnet" | "mainnet-beta" = "devnet") {
     this.network = network;
 
-    // Create connection
-    const endpoint =
-      network === "mainnet-beta"
+    // Create connection using environment variable or fallback to default cluster URLs
+    let endpoint: string;
+    
+    if (process.env.NEXT_PUBLIC_SOLANA_RPC_URL) {
+      // Use custom RPC endpoint from environment variable
+      endpoint = process.env.NEXT_PUBLIC_SOLANA_RPC_URL;
+      // console.log("Using custom Solana RPC endpoint:", endpoint);
+    } else {
+      // Fallback to default cluster URLs
+      endpoint = network === "mainnet-beta"
         ? clusterApiUrl("mainnet-beta")
         : clusterApiUrl("devnet");
+      console.log("Using default Solana cluster endpoint:", endpoint);
+    }
 
     this.connection = new Connection(endpoint, "confirmed");
   }

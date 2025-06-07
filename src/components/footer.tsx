@@ -26,13 +26,7 @@ export default function Footer() {
           <div className="flex flex-col items-center space-y-4">
             <div className="flex space-x-6">
               <a
-                href="#"
-                className="text-muted-foreground hover:text-foreground transition-colors font-medium"
-              >
-                Discord
-              </a>
-              <a
-                href="#"
+                href="https://x.com/zodiacnftsol"
                 className="text-muted-foreground hover:text-foreground transition-colors font-medium"
               >
                 Twitter

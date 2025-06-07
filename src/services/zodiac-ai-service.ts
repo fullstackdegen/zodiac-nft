@@ -30,6 +30,7 @@ export interface ZodiacNFTMetadata {
   cosmicAlignment: string;
   attributes: NFTAttribute[];
   characterPrompt: ZodiacCharacterPrompt;
+  language: string;
   createdAt: string;
 }
 
@@ -48,7 +49,8 @@ export class ZodiacAIService {
 
   async generateCharacterPrompt(
     zodiacData: ZodiacResult,
-    userPreferences?: string
+    userPreferences?: string,
+    language?: string
   ): Promise<ZodiacCharacterPrompt> {
     const systemPrompt = `You are a cosmic artist and mystical zodiac expert. Create unique, personalized avatar descriptions based on zodiac signs and birth data. 
 
@@ -62,6 +64,7 @@ IMPORTANT: You must respond with ONLY a valid JSON object with these exact prope
   "cosmicTheme": "One sentence describing the cosmic theme"
 }
 
+${language && language !== "English" ? `Generate all text content in ${language} language.` : ""}
 Focus on creating mystical, ethereal, collectible-quality avatars suitable for NFTs. Return ONLY the JSON object, no other text.`;
 
     const userPrompt = `Create a unique avatar for a ${
@@ -83,6 +86,7 @@ Cosmic Attributes: ${zodiacData.cosmicAttributes.join(", ")}
 User Preferences: ${
       userPreferences || "Surprise me with something mystical and unique"
     }
+${language && language !== "English" ? `\nLanguage: Generate content in ${language}` : ""}
 
 Rarity Factors:
 - Birth Date Rarity: ${(zodiacData.rarityFactors.birthDateRarity * 100).toFixed(
@@ -292,9 +296,10 @@ Art style: High-quality digital illustration, fantasy art, cosmic theme, profess
 
   async createPersonalizedDescription(
     zodiacData: ZodiacResult,
-    characterPrompt: ZodiacCharacterPrompt
+    characterPrompt: ZodiacCharacterPrompt,
+    language?: string
   ): Promise<string> {
-    const systemPrompt = `You are a mystical narrator creating personalized descriptions for zodiac-based NFT avatars. Write engaging, cosmic descriptions that make the owner feel connected to their unique avatar.`;
+    const systemPrompt = `You are a mystical narrator creating personalized descriptions for zodiac-based NFT avatars. Write engaging, cosmic descriptions that make the owner feel connected to their unique avatar.${language && language !== "English" ? ` Write in ${language} language.` : ""}`;
 
     const userPrompt = `Create a personalized description for this zodiac avatar:
 
@@ -316,7 +321,7 @@ Write a mystical, engaging description (2-3 sentences) that:
 3. Makes them feel special about their avatar
 4. Mentions any rare features or special birth attributes
 
-Keep it mystical but not overly dramatic.`;
+Keep it mystical but not overly dramatic.${language && language !== "English" ? ` Write the entire response in ${language}.` : ""}`;
 
     try {
       const completion = await this.openai.chat.completions.create({
@@ -346,13 +351,15 @@ Keep it mystical but not overly dramatic.`;
   async generateZodiacAvatar(
     zodiacData: ZodiacResult,
     userInput?: string,
-    birthDate?: string
+    birthDate?: string,
+    language?: string
   ): Promise<ZodiacNFTMetadata> {
     try {
       // Step 1: Generate character prompt using AI
       const characterPrompt = await this.generateCharacterPrompt(
         zodiacData,
-        userInput
+        userInput,
+        language
       );
 
       // Step 2: Create optimized image prompt
@@ -367,7 +374,8 @@ Keep it mystical but not overly dramatic.`;
       // Step 4: Create personalized description
       const personalizedDescription = await this.createPersonalizedDescription(
         zodiacData,
-        characterPrompt
+        characterPrompt,
+        language
       );
 
       // Step 5: Calculate rarity score
@@ -396,9 +404,11 @@ Keep it mystical but not overly dramatic.`;
         attributes: this.generateNFTAttributes(
           zodiacData,
           characterPrompt,
-          rarityScore
+          rarityScore,
+          language || "English"
         ),
         characterPrompt,
+        language: language || "English",
         createdAt: new Date().toISOString(),
       };
 
@@ -440,12 +450,14 @@ Keep it mystical but not overly dramatic.`;
   private generateNFTAttributes(
     zodiacData: ZodiacResult,
     characterPrompt: ZodiacCharacterPrompt,
-    rarityScore: number
+    rarityScore: number,
+    language: string
   ): NFTAttribute[] {
     const attributes: NFTAttribute[] = [
       { trait_type: "Zodiac Sign", value: zodiacData.sign },
       { trait_type: "Element", value: zodiacData.element },
       { trait_type: "Season", value: zodiacData.birthDateMetadata.season },
+      { trait_type: "Language", value: language },
       { trait_type: "Rarity Score", value: rarityScore.toFixed(1) + "%" },
       { trait_type: "Cosmic Theme", value: characterPrompt.cosmicTheme },
     ];

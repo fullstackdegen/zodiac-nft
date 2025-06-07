@@ -61,6 +61,8 @@ const MintCard = forwardRef<MintCardRef, MintCardProps>(
 
     const [selectedSign, setSelectedSign] = useState<string>("");
     const [userPreferences, setUserPreferences] = useState<string>("");
+    const [selectedLanguage, setSelectedLanguage] = useState<string>("English");
+    const [birthDate, setBirthDate] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
     const [showProgressDialog, setShowProgressDialog] = useState(false);
@@ -99,6 +101,19 @@ const MintCard = forwardRef<MintCardRef, MintCardProps>(
         description: "Your cosmic NFT is ready! ✨",
         text: "DONE",
       },
+    ];
+
+    const languageOptions = [
+      { value: "English", label: "English", flag: "🇺🇸" },
+      { value: "Spanish", label: "Español", flag: "🇪🇸" },
+      { value: "French", label: "Français", flag: "🇫🇷" },
+      { value: "German", label: "Deutsch", flag: "🇩🇪" },
+      { value: "Italian", label: "Italiano", flag: "🇮🇹" },
+      { value: "Portuguese", label: "Português", flag: "🇵🇹" },
+      { value: "Russian", label: "Русский", flag: "🇷🇺" },
+      { value: "Japanese", label: "日本語", flag: "🇯🇵" },
+      { value: "Korean", label: "한국어", flag: "🇰🇷" },
+      { value: "Chinese", label: "中文", flag: "🇨🇳" },
     ];
 
     useImperativeHandle(ref, () => ({
@@ -167,6 +182,8 @@ const MintCard = forwardRef<MintCardRef, MintCardProps>(
               dates: selectedZodiacData.dates,
             },
             userPreferences: userPreferences.trim() || undefined,
+            language: selectedLanguage,
+            birthDate: birthDate.trim() || undefined,
           }),
         });
 
@@ -310,6 +327,47 @@ const MintCard = forwardRef<MintCardRef, MintCardProps>(
                 />
               </div>
 
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-gray-700 flex items-center">
+                  <Icon icon="lucide:language" className="w-4 h-4 mr-1.25" />
+                  Choose Your Language
+                </label>
+                <Select onValueChange={setSelectedLanguage} defaultValue="English">
+                  <SelectTrigger
+                    className="border-gray-300 rounded-lg w-full"
+                  >
+                    <SelectValue placeholder="Select your language..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {languageOptions.map((language) => (
+                      <SelectItem key={language.value} value={language.value}>
+                        <div className="flex items-center space-x-2">
+                          <span>{language.flag}</span>
+                          <span>{language.label}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-gray-700 flex items-center">
+                  <Icon icon="lucide:birthday-cake" className="w-4 h-4 mr-1.25" />
+                  Enter Your Birth Date (Optional)
+                </label>
+                <Input
+                  type="date"
+                  className="border-gray-300 rounded-lg"
+                  value={birthDate}
+                  onChange={(e) => setBirthDate(e.target.value)}
+                  max={new Date().toISOString().split('T')[0]}
+                />
+                <p className="text-xs text-gray-500">
+                  Providing your birth date enables more accurate astrological analysis and personalization
+                </p>
+              </div>
+
               <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-700 font-medium">Price:</span>
@@ -406,6 +464,35 @@ const MintCard = forwardRef<MintCardRef, MintCardProps>(
                         </span>
                         <span className="text-gray-600 ml-1">
                           {userPreferences}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="bg-gray-50 p-3 rounded-lg border">
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-700">
+                        Language:
+                      </span>
+                      <span className="text-gray-600 ml-1 flex items-center gap-1">
+                        {languageOptions.find(lang => lang.value === selectedLanguage)?.flag}
+                        {languageOptions.find(lang => lang.value === selectedLanguage)?.label}
+                      </span>
+                    </div>
+                  </div>
+
+                  {birthDate && (
+                    <div className="bg-gray-50 p-3 rounded-lg border">
+                      <div className="text-sm">
+                        <span className="font-medium text-gray-700">
+                          Birth Date:
+                        </span>
+                        <span className="text-gray-600 ml-1">
+                          {new Date(birthDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
                         </span>
                       </div>
                     </div>

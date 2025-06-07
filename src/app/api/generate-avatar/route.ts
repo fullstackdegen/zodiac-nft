@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { zodiacSign, zodiacData, userPreferences } = body;
+    const { zodiacSign, zodiacData, userPreferences, language, birthDate } = body;
 
     // Validate required data
     if (!zodiacSign || !zodiacData || !zodiacData.sign) {
@@ -26,7 +26,9 @@ export async function POST(request: NextRequest) {
     console.log('Generating avatar for:', {
       zodiacSign,
       zodiacData,
-      userPreferences: userPreferences || 'None'
+      userPreferences: userPreferences || 'None',
+      language: language || 'English',
+      birthDate: birthDate || 'Not provided'
     });
 
     // Create simplified ZodiacResult from sign data
@@ -59,7 +61,9 @@ export async function POST(request: NextRequest) {
     const aiService = new ZodiacAIService();
     const avatar = await aiService.generateZodiacAvatar(
       simplifiedZodiacData,
-      userPreferences
+      userPreferences,
+      birthDate, // birthDate
+      language
     );
 
     return NextResponse.json({ avatar });
