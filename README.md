@@ -213,6 +213,23 @@ This project is for educational and demonstration purposes.
 4. Add tests if applicable
 5. Submit a pull request
 
+
+
+## 🔐 Security & Transparency Statement
+
+This project is fully open-source and intended for educational and entertainment purposes on the Solana blockchain. 
+
+- No user data is stored or tracked.
+- No wallet credentials or private information are collected.
+- Wallet access is only requested for minting NFTs with user approval via standard Solana wallet flow.
+- All contract interactions are transparent and on-chain.
+- Codebase is MIT licensed and available for public auditing.
+
+We fully support Phantom’s commitment to user safety and welcome any technical review or audit.
+
+
+
+
 ## Support
 
 For issues and questions, please check the existing issues or create a new one in the GitHub repository. 
